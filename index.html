@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EcoSense — Track Today. Protect Tomorrow.</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">
+      <img src="logo.png" alt="EcoSense" class="nav-logo-img" onerror="this.style.display='none'"/>
+      <span class="logo-text">EcoSense</span>
+    </a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#achievements">Achievements</a>
+      <a href="#impact">Impact</a>
+      <a href="#testimonials">Stories</a>
+    </div>
+    <div class="nav-auth">
+      <button class="btn-ghost" onclick="openAuth('login')">Log in</button>
+      <button class="btn-primary" onclick="openAuth('register')">Get started</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge"><span>🌍</span> COPPA &amp; GDPR Compliant · 15+ Countries</div>
+    <h1 class="hero-title">Track Today.<br/><span class="gradient-text">Protect Tomorrow.</span></h1>
+    <p class="hero-subtitle">AI-powered eco coaching woven into your daily routine. Log water, energy, travel &amp; food — and watch your planet score grow.</p>
+    <div class="hero-ctas">
+      <button class="btn-hero-primary" onclick="openAuth('register')">Start your eco journey →</button>
+      <a href="#features" class="btn-hero-ghost">See how it works</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="earth-wrapper">
+      <div class="earth">🌍</div>
+      <div class="orbit orbit-1"><div class="orbit-dot" style="--c:#4ade80">💧</div></div>
+      <div class="orbit orbit-2"><div class="orbit-dot" style="--c:#facc15">⚡</div></div>
+      <div class="orbit orbit-3"><div class="orbit-dot" style="--c:#60a5fa">🚲</div></div>
+      <div class="orbit orbit-4"><div class="orbit-dot" style="--c:#f97316">🥗</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="section-header">
+    <div class="section-tag">Features</div>
+    <h2>Everything you need to go green</h2>
+    <p>Four powerful pillars built to make sustainability second nature.</p>
+  </div>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feat-label">A</div>
+      <div class="feat-icon-wrap" style="--bg:#dcfce7;--clr:#16a34a">💧</div>
+      <h3>Daily Resource Tracking</h3>
+      <p>Log water, electricity, travel, and food every day with a simple, quick interface. Understand your personal footprint in minutes.</p>
+      <ul class="feat-list">
+        <li>🚿 Water — showers, taps, laundry</li>
+        <li>⚡ Electricity — kWh by regional grid</li>
+        <li>🚗 Travel — walk, bike, transit, car</li>
+        <li>🥗 Food — veggie to meat scoring</li>
+      </ul>
+    </div>
+    <div class="feature-card">
+      <div class="feat-label">B</div>
+      <div class="feat-icon-wrap" style="--bg:#dbeafe;--clr:#2563eb">📊</div>
+      <h3>Smart Dashboard &amp; AI Analysis</h3>
+      <p>Visualise trends with beautiful charts. Our AI coach gives you personalised insights and sustainability tips every week.</p>
+      <ul class="feat-list">
+        <li>📈 Weekly trend graphs</li>
+        <li>🥧 Category breakdowns</li>
+        <li>🤖 AI-powered suggestions</li>
+        <li>🎯 Personal goal tracking</li>
+      </ul>
+    </div>
+    <div class="feature-card">
+      <div class="feat-label">C</div>
+      <div class="feat-icon-wrap" style="--bg:#fef9c3;--clr:#ca8a04">🏆</div>
+      <h3>Gamification &amp; Leaderboards</h3>
+      <p>Earn badges, maintain streaks, and climb local and national leaderboards. Sustainability becomes addictive when it's a game.</p>
+      <ul class="feat-list">
+        <li>🎖️ Badge progression system</li>
+        <li>🔥 Daily streak tracker</li>
+        <li>🏙️ City · District · Zone · Nation</li>
+        <li>✅ Daily eco challenges</li>
+      </ul>
+    </div>
+    <div class="feature-card">
+      <div class="feat-label">D</div>
+      <div class="feat-icon-wrap" style="--bg:#fce7f3;--clr:#db2777">📚</div>
+      <h3>Education Hub</h3>
+      <p>Watch videos, read articles, and take AI-powered quizzes that make learning about the planet genuinely exciting.</p>
+      <ul class="feat-list">
+        <li>🎥 YouTube video lessons</li>
+        <li>📰 Curated articles</li>
+        <li>🧩 AI quiz challenges</li>
+        <li>🌐 Global challenge data</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- GAMIFICATION SHOWCASE -->
+<section class="gamification-section" id="gamification">
+  <div class="section-header light">
+    <div class="section-tag dark">Gamification</div>
+    <h2>Level up your eco impact</h2>
+    <p>Progress from Eco Beginner to Earth Champion through real action.</p>
+  </div>
+  <div class="badges-showcase">
+    <div class="badge-card">
+      <div class="badge-icon">🌱</div>
+      <div class="badge-name">Eco Beginner</div>
+      <div class="badge-pts">0–100 pts</div>
+    </div>
+    <div class="badge-arrow">→</div>
+    <div class="badge-card active">
+      <div class="badge-icon">♻️</div>
+      <div class="badge-name">Green Warrior</div>
+      <div class="badge-pts">101–500 pts</div>
+    </div>
+    <div class="badge-arrow">→</div>
+    <div class="badge-card">
+      <div class="badge-icon">🌳</div>
+      <div class="badge-name">Nature Guardian</div>
+      <div class="badge-pts">501–1000 pts</div>
+    </div>
+    <div class="badge-arrow">→</div>
+    <div class="badge-card">
+      <div class="badge-icon">🌍</div>
+      <div class="badge-name">Earth Champion</div>
+      <div class="badge-pts">1000+ pts</div>
+    </div>
+  </div>
+  <div class="streak-banner">
+    <span>🔥 Keep your streak alive — log every day to multiply your points!</span>
+  </div>
+</section>
+
+<!-- BEST ACHIEVEMENTS (daily rotating carousel) -->
+<section class="achievements-section" id="achievements">
+  <div class="section-header">
+    <div class="section-tag">Best Achievements</div>
+    <h2>Today's Hall of Fame 🏅</h2>
+    <p>Real actions by real students — refreshed every day. You could be next.</p>
+  </div>
+  <div class="achievements-overflow">
+    <div class="achievements-track" id="achievementsTrack">
+      <!-- populated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- WHY ECOSENSE IS BETTER -->
+<section class="comparison-section">
+  <div class="comparison-wrapper">
+    <div class="section-header">
+      <div class="section-tag">Why EcoSense?</div>
+      <h2>Different by design</h2>
+      <p>Hundreds of apps claim to change the world. We actually do it — one student at a time.</p>
+    </div>
+    <div class="comparison-grid">
+      <div class="comparison-col us">
+        <div class="col-header">🌿 EcoSense</div>
+        <ul class="comparison-list">
+          <li class="comparison-row"><span class="cmp-icon">✅</span> Tracks water, energy, travel &amp; food together in one place</li>
+          <li class="comparison-row"><span class="cmp-icon">✅</span> Real-time AI coach that knows your name, score and streak</li>
+          <li class="comparison-row"><span class="cmp-icon">✅</span> 4-level leaderboard: City → District → Zone → Nation</li>
+          <li class="comparison-row"><span class="cmp-icon">✅</span> Daily challenges that reset &amp; reward consistent action</li>
+          <li class="comparison-row"><span class="cmp-icon">✅</span> Gamified badge progression — real motivation to keep going</li>
+          <li class="comparison-row"><span class="cmp-icon">✅</span> Education hub with videos, articles and interactive quizzes</li>
+          <li class="comparison-row"><span class="cmp-icon">✅</span> Built for students — simple, fast, no clutter</li>
+          <li class="comparison-row"><span class="cmp-icon">✅</span> Community impact stories that show real ripple effects</li>
+        </ul>
+      </div>
+      <div class="comparison-col others">
+        <div class="col-header">🌐 Other Apps</div>
+        <ul class="comparison-list">
+          <li class="comparison-row"><span class="cmp-icon">❌</span> Usually track only carbon or only one category</li>
+          <li class="comparison-row"><span class="cmp-icon">❌</span> Generic chatbots with no awareness of your data</li>
+          <li class="comparison-row"><span class="cmp-icon">❌</span> Leaderboards either absent or national-only</li>
+          <li class="comparison-row"><span class="cmp-icon">❌</span> One-time tips — no ongoing daily engagement</li>
+          <li class="comparison-row"><span class="cmp-icon">❌</span> No badge or reward system to sustain motivation</li>
+          <li class="comparison-row"><span class="cmp-icon">❌</span> Link out to third-party content with no curation</li>
+          <li class="comparison-row"><span class="cmp-icon">❌</span> Designed for adults — overwhelming for students</li>
+          <li class="comparison-row"><span class="cmp-icon">❌</span> No stories from communities affected by student actions</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INSPIRATIONAL QUOTES -->
+<section class="quotes-section">
+  <div class="quotes-inner">
+    <div class="section-header light">
+      <div class="section-tag dark">Inspiration</div>
+      <h2>Words that move the world</h2>
+    </div>
+    <div class="quote-display" id="quoteDisplay">
+      <div class="quote-mark">"</div>
+      <p class="quote-text" id="quoteText">Loading...</p>
+      <p class="quote-author" id="quoteAuthor"></p>
+    </div>
+    <div class="quote-dots" id="quoteDots"></div>
+  </div>
+</section>
+
+<!-- COMMUNITY IMPACT -->
+<section class="impact-section" id="impact">
+  <div class="section-header">
+    <div class="section-tag">Community Impact</div>
+    <h2>Voices from India 🇮🇳</h2>
+    <p>How student actions are rippling into real communities.</p>
+  </div>
+  <div class="impact-grid">
+    <div class="impact-card">
+      <div class="impact-quote">"The children from the nearby school convinced me to switch to cloth bags. My plastic usage has gone down by 60%."</div>
+      <div class="impact-person"><span class="impact-emoji">🛍️</span><div><strong>Meena Devi</strong><br/><small>Shopkeeper, Jaipur</small></div></div>
+    </div>
+    <div class="impact-card">
+      <div class="impact-quote">"After the students ran a water-saving workshop, our village reduced water consumption by 30% this summer."</div>
+      <div class="impact-person"><span class="impact-emoji">🌾</span><div><strong>Raju Patil</strong><br/><small>Farmer, Pune</small></div></div>
+    </div>
+    <div class="impact-card">
+      <div class="impact-quote">"My daughter explained composting to me. Now our whole street has started a composting group together."</div>
+      <div class="impact-person"><span class="impact-emoji">🌿</span><div><strong>Sunita Sharma</strong><br/><small>Homemaker, Delhi</small></div></div>
+    </div>
+    <div class="impact-card">
+      <div class="impact-quote">"The eco points system made my son more mindful. He cycles to school every single day now."</div>
+      <div class="impact-person"><span class="impact-emoji">🚴</span><div><strong>Vikram Nair</strong><br/><small>Engineer, Bangalore</small></div></div>
+    </div>
+    <div class="impact-card">
+      <div class="impact-quote">"Students from the local school planted saplings on our farm boundary. It has helped with soil erosion greatly."</div>
+      <div class="impact-person"><span class="impact-emoji">🌱</span><div><strong>Ganesh Rao</strong><br/><small>Farmer, Karnataka</small></div></div>
+    </div>
+    <div class="impact-card">
+      <div class="impact-quote">"Because of EcoSense, my neighbourhood started a solar roof initiative. We now save ₹3,000/month on electricity."</div>
+      <div class="impact-person"><span class="impact-emoji">☀️</span><div><strong>Priya Menon</strong><br/><small>Teacher, Chennai</small></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials-section" id="testimonials">
+  <div class="section-header">
+    <div class="section-tag">Student Stories</div>
+    <h2>What students are saying</h2>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial-card">
+      <div class="stars">⭐⭐⭐⭐⭐</div>
+      <p>"EcoSense made me realise I was wasting so much water. Now I've cut it by half!"</p>
+      <div class="testimonial-author"><span class="t-emoji">🌊</span><div><strong>Aryan K.</strong><br/><small>Grade 8 · Mumbai</small></div></div>
+    </div>
+    <div class="testimonial-card">
+      <div class="stars">⭐⭐⭐⭐⭐</div>
+      <p>"The leaderboard got my whole class competing — but for the planet. Best thing ever."</p>
+      <div class="testimonial-author"><span class="t-emoji">🏆</span><div><strong>Lucia R.</strong><br/><small>Grade 9 · Madrid</small></div></div>
+    </div>
+    <div class="testimonial-card">
+      <div class="stars">⭐⭐⭐⭐⭐</div>
+      <p>"The AI chat answered all my questions about climate change. It's like having a science tutor."</p>
+      <div class="testimonial-author"><span class="t-emoji">🤖</span><div><strong>Kenji T.</strong><br/><small>Grade 8 · Tokyo</small></div></div>
+    </div>
+    <div class="testimonial-card">
+      <div class="stars">⭐⭐⭐⭐⭐</div>
+      <p>"I earned the Earth Champion badge in 3 months. My friends are racing to beat me now!"</p>
+      <div class="testimonial-author"><span class="t-emoji">🌍</span><div><strong>Amara O.</strong><br/><small>Grade 10 · Lagos</small></div></div>
+    </div>
+    <div class="testimonial-card">
+      <div class="stars">⭐⭐⭐⭐⭐</div>
+      <p>"Tracking my food choices opened my eyes. I reduced meat intake and feel so much better."</p>
+      <div class="testimonial-author"><span class="t-emoji">🥗</span><div><strong>Isabella M.</strong><br/><small>Grade 9 · São Paulo</small></div></div>
+    </div>
+    <div class="testimonial-card">
+      <div class="stars">⭐⭐⭐⭐⭐</div>
+      <p>"My streak of 45 days keeps me motivated every morning. It's part of my routine now."</p>
+      <div class="testimonial-author"><span class="t-emoji">🔥</span><div><strong>Rohan S.</strong><br/><small>Grade 8 · Delhi</small></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-blob"></div>
+  <div class="cta-content">
+    <h2>Ready to start your eco journey?</h2>
+    <p>Join students already making a difference.</p>
+    <button class="btn-hero-primary large" onclick="openAuth('register')">Start your eco journey →</button>
+    <p class="cta-note">Free for students. No credit card required.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo">
+        <img src="logo.png" alt="EcoSense" class="nav-logo-img" onerror="this.style.display='none'"/>
+        <span class="logo-text">EcoSense</span>
+      </div>
+      <p>Making sustainability second nature for the next generation.</p>
+      <div class="footer-trust">
+        <span>🔒 COPPA</span><span>🛡️ GDPR</span><span>🤖 AI-Powered</span>
+      </div>
+    </div>
+    <div class="footer-credits">
+      <div class="footer-section-title">Made with 💚 by</div>
+      <p><strong>Mahadevi Birla World Academy</strong></p>
+      <p>Ahilan · Shreyansh</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 EcoSense. All rights reserved.</span>
+    <span>Designed for a greener tomorrow 🌿</span>
+  </div>
+</footer>
+
+<!-- AUTH MODAL -->
+<div class="auth-overlay" id="authModal" onclick="handleOverlayClick(event)">
+  <div class="auth-modal">
+    <button class="auth-close" onclick="closeAuth()">✕</button>
+    <div class="auth-modal-header">
+      <img src="logo.png" alt="" style="width:48px;height:48px;border-radius:10px;object-fit:cover;margin-bottom:8px" onerror="this.outerHTML='<span style=font-size:36px;display:block;margin-bottom:8px>🌿</span>'"/>
+      <h2>Welcome to EcoSense</h2>
+      <p>Track your habits. Protect the planet.</p>
+    </div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-tab="login"    onclick="switchAuthTab('login')">Log In</button>
+      <button class="auth-tab"        data-tab="register" onclick="switchAuthTab('register')">Sign Up</button>
+    </div>
+
+    <!-- LOGIN -->
+    <form class="auth-form active" id="form-login" onsubmit="handleLogin(event)">
+      <div class="auth-field">
+        <label>Email address</label>
+        <input type="email" id="login-email" placeholder="you@school.com" required autocomplete="email"/>
+      </div>
+      <div class="auth-field">
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="Enter your password" required autocomplete="current-password"/>
+      </div>
+      <div class="auth-error" id="login-error"></div>
+      <button type="submit" class="auth-submit">Log In →</button>
+    </form>
+
+    <!-- REGISTER -->
+    <form class="auth-form" id="form-register" onsubmit="handleRegister(event)">
+      <div class="auth-field">
+        <label>Your full name</label>
+        <input type="text" id="reg-name" placeholder="e.g. Aryan Kumar" required autocomplete="name"/>
+      </div>
+      <div class="auth-field">
+        <label>Email address</label>
+        <input type="email" id="reg-email" placeholder="you@school.com" required autocomplete="email"/>
+      </div>
+      <div class="auth-field">
+        <label>Your city</label>
+        <input type="text" id="reg-city" placeholder="e.g. Mumbai" required/>
+      </div>
+      <div class="auth-field">
+        <label>Your nation / country</label>
+        <input type="text" id="reg-nation" placeholder="e.g. India" required/>
+      </div>
+      <div class="auth-field">
+        <label>Password</label>
+        <input type="password" id="reg-password" placeholder="At least 6 characters" required autocomplete="new-password"/>
+      </div>
+      <div class="auth-field">
+        <label>Confirm password</label>
+        <input type="password" id="reg-confirm" placeholder="Repeat password" required autocomplete="new-password"/>
+      </div>
+      <div class="auth-error" id="reg-error"></div>
+      <button type="submit" class="auth-submit">Create Account →</button>
+    </form>
+  </div>
+</div>
+
+<script>
+// =====================================================================
+//  DATA
+// =====================================================================
+const ACHIEVEMENTS_POOL = [
+  { name:'Aditya K.', city:'Mumbai', badge:'🌍', title:'Earth Champion', feat:'Logged 60 consecutive days without missing one single entry', pts:1240 },
+  { name:'Riya S.', city:'Delhi', badge:'🌳', title:'Nature Guardian', feat:'Cycled to school every day for two whole months', pts:890 },
+  { name:'Shreya M.', city:'Pune', badge:'♻️', title:'Green Warrior', feat:'Convinced her entire family to switch to LED bulbs throughout the house', pts:650 },
+  { name:'Karan P.', city:'Bangalore', badge:'💧', title:'Water Hero', feat:'Reduced shower time to under 4 minutes daily for a month', pts:540 },
+  { name:'Ananya T.', city:'Chennai', badge:'⚡', title:'Energy Saver', feat:'Went fully vegetarian for an entire month and shared her journey', pts:780 },
+  { name:'Rohan V.', city:'Hyderabad', badge:'🌍', title:'Earth Champion', feat:'Started a composting programme that spread to 12 families', pts:1080 },
+  { name:'Priya N.', city:'Kolkata', badge:'🌳', title:'Nature Guardian', feat:'Planted 15 saplings in her neighbourhood park with friends', pts:920 },
+  { name:'Arjun L.', city:'Jaipur', badge:'♻️', title:'Green Warrior', feat:'Organised a plastic-free lunch day at school for 200+ students', pts:700 },
+  { name:'Meera B.', city:'Ahmedabad', badge:'💧', title:'Water Hero', feat:'Set up a rainwater harvesting system on her rooftop at home', pts:860 },
+  { name:'Vikram D.', city:'Lucknow', badge:'⚡', title:'Energy Saver', feat:'Persuaded parents to install solar panels — now energy self-sufficient', pts:990 },
+  { name:'Kavya R.', city:'Bhopal', badge:'🌳', title:'Nature Guardian', feat:'Completed a 45-day unbroken eco challenge streak this summer', pts:830 },
+  { name:'Dev M.', city:'Surat', badge:'🌍', title:'Earth Champion', feat:'Reduced his family\'s carbon footprint by 40% in just 90 days', pts:1150 },
+  { name:'Tanvi A.', city:'Nagpur', badge:'♻️', title:'Green Warrior', feat:'Switched her entire tiffin to zero-waste packaging this year', pts:720 },
+  { name:'Sahil K.', city:'Chandigarh', badge:'🌱', title:'Eco Beginner', feat:'Logged every single day in his very first month on the app', pts:310 },
+  { name:'Ishaan R.', city:'Indore', badge:'🌍', title:'Earth Champion', feat:'Walked to school every day for a full academic term — rain or shine', pts:1310 },
+  { name:'Nandini S.', city:'Coimbatore', badge:'⚡', title:'Energy Saver', feat:'Turned off all idle electronics for 30 days — saved ₹800 in bills', pts:610 },
+  { name:'Parth G.', city:'Vadodara', badge:'🌳', title:'Nature Guardian', feat:'Ran a 3-day eco awareness campaign at his school for Earth Day', pts:870 },
+  { name:'Simran K.', city:'Amritsar', badge:'💧', title:'Water Hero', feat:'Installed a bucket system in her bathroom and saved 500+ litres', pts:490 },
+];
+
+const QUOTES = [
+  { text: 'We do not inherit the earth from our ancestors — we borrow it from our children.', author: 'Native American Proverb' },
+  { text: 'The Earth does not belong to us. We belong to the Earth.', author: 'Chief Seattle' },
+  { text: 'Small acts, when multiplied by millions of people, can transform the world.', author: 'Howard Zinn' },
+  { text: 'In every walk with nature, one receives far more than he seeks.', author: 'John Muir' },
+  { text: 'What you do makes a difference, and you have to decide what kind of difference you want to make.', author: 'Jane Goodall' },
+  { text: 'The greatest threat to our planet is the belief that someone else will save it.', author: 'Robert Swan' },
+  { text: 'Act as if what you do makes a difference. It does.', author: 'William James' },
+  { text: 'The environment is where we all meet; where we all have a mutual interest.', author: 'Lady Bird Johnson' },
+  { text: 'You cannot get through a single day without having an impact on the world around you.', author: 'Jane Goodall' },
+  { text: 'It always seems impossible until it\'s done.', author: 'Nelson Mandela' },
+];
+
+// =====================================================================
+//  AUTH HELPERS
+// =====================================================================
+function getUsers()  { try { return JSON.parse(localStorage.getItem('eco_users') || '{}'); } catch(e) { return {}; } }
+function saveUsers(u){ localStorage.setItem('eco_users', JSON.stringify(u)); }
+
+(function() {
+  const email = localStorage.getItem('eco_current');
+  if (email) {
+    if (getUsers()[email]) window.location.replace('dashboard.html');
+    else localStorage.removeItem('eco_current'); // stale session — clear it
+  }
+})();
+
+// =====================================================================
+//  MODAL
+// =====================================================================
+function openAuth(tab) {
+  document.getElementById('authModal').classList.add('open');
+  switchAuthTab(tab || 'login');
+}
+function closeAuth() { document.getElementById('authModal').classList.remove('open'); }
+function handleOverlayClick(e) { if (e.target === document.getElementById('authModal')) closeAuth(); }
+function switchAuthTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+  document.getElementById('form-' + tab).classList.add('active');
+  document.getElementById('login-error').textContent = '';
+  document.getElementById('reg-error').textContent = '';
+}
+
+function handleRegister(e) {
+  e.preventDefault();
+  const name     = document.getElementById('reg-name').value.trim();
+  const email    = document.getElementById('reg-email').value.trim().toLowerCase();
+  const city     = document.getElementById('reg-city').value.trim();
+  const nation   = document.getElementById('reg-nation').value.trim();
+  const password = document.getElementById('reg-password').value;
+  const confirm  = document.getElementById('reg-confirm').value;
+  const errEl    = document.getElementById('reg-error');
+  if (!name || !email || !city || !nation) { errEl.textContent = 'Please fill in all fields.'; return; }
+  if (password !== confirm)  { errEl.textContent = 'Passwords do not match.'; return; }
+  if (password.length < 6)   { errEl.textContent = 'Password must be at least 6 characters.'; return; }
+  const users = getUsers();
+  if (users[email]) { errEl.textContent = 'An account with this email already exists.'; return; }
+  users[email] = { name, email, password, city, nation, points:0, streak:0, lastLogDate:null, waterSaved:0, energySaved:0, logs:[], completedChallenges:{} };
+  saveUsers(users);
+  localStorage.setItem('eco_current', email);
+  window.location.href = 'dashboard.html';
+}
+
+function handleLogin(e) {
+  e.preventDefault();
+  const email    = document.getElementById('login-email').value.trim().toLowerCase();
+  const password = document.getElementById('login-password').value;
+  const errEl    = document.getElementById('login-error');
+  if (!email || !password) { errEl.textContent = 'Please enter your email and password.'; return; }
+  const users = getUsers();
+  const account = users[email];
+  if (!account)                      { errEl.textContent = 'No account found with this email.'; return; }
+  if (account.password !== password) { errEl.textContent = 'Incorrect password.'; return; }
+  localStorage.setItem('eco_current', email);
+  window.location.href = 'dashboard.html';
+}
+
+// =====================================================================
+//  ACHIEVEMENT CAROUSEL
+// =====================================================================
+function renderAchievements() {
+  const dayIndex = Math.floor(Date.now() / 86400000);
+  const start    = (dayIndex * 6) % ACHIEVEMENTS_POOL.length;
+  const today6   = [];
+  for (let i = 0; i < 6; i++) today6.push(ACHIEVEMENTS_POOL[(start + i) % ACHIEVEMENTS_POOL.length]);
+  // Duplicate for seamless loop
+  const all = [...today6, ...today6];
+  const html = all.map(a => `
+    <div class="achievement-card">
+      <div class="ach-badge-row">
+        <span class="ach-badge-emoji">${a.badge}</span>
+        <span class="ach-pts">${a.pts} pts</span>
+      </div>
+      <p class="ach-feat">"${a.feat}"</p>
+      <div class="ach-person">
+        <div class="ach-avatar">${a.name.charAt(0)}</div>
+        <div class="ach-info">
+          <strong>${a.name}</strong>
+          <small>${a.title} · ${a.city}</small>
+        </div>
+      </div>
+    </div>`).join('');
+  document.getElementById('achievementsTrack').innerHTML = html;
+}
+
+// =====================================================================
+//  QUOTES ROTATOR
+// =====================================================================
+let currentQuote = 0;
+function renderQuote(index) {
+  const q = QUOTES[index];
+  const textEl   = document.getElementById('quoteText');
+  const authorEl = document.getElementById('quoteAuthor');
+  textEl.style.opacity = '0';
+  setTimeout(() => {
+    textEl.textContent   = q.text;
+    authorEl.innerHTML   = '— <span>' + q.author + '</span>';
+    textEl.style.opacity = '1';
+  }, 300);
+  document.querySelectorAll('.q-dot').forEach((d, i) => d.classList.toggle('active', i === index));
+}
+
+function renderQuoteDots() {
+  const dotsEl = document.getElementById('quoteDots');
+  dotsEl.innerHTML = QUOTES.map((_, i) =>
+    `<div class="q-dot${i===0?' active':''}" onclick="jumpQuote(${i})"></div>`
+  ).join('');
+}
+
+function jumpQuote(i) {
+  currentQuote = i;
+  renderQuote(i);
+}
+
+function startQuoteRotation() {
+  renderQuoteDots();
+  renderQuote(0);
+  setInterval(() => {
+    currentQuote = (currentQuote + 1) % QUOTES.length;
+    renderQuote(currentQuote);
+  }, 6000);
+}
+
+// =====================================================================
+//  INIT
+// =====================================================================
+window.addEventListener('load', () => {
+  renderAchievements();
+  startQuoteRotation();
+});
+</script>
+</body>
+</html>

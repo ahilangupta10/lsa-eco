@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EcoSense Dashboard</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+</head>
+<body class="dashboard-body">
+
+<!-- NAV -->
+<nav class="dash-nav">
+  <a href="index.html" class="logo">
+    <img src="logo.png" alt="EcoSense" class="nav-logo-img" onerror="this.style.display='none'"/>
+    <span class="logo-text">EcoSense</span>
+  </a>
+  <div class="dash-nav-center">
+    <button class="dash-tab active" onclick="showTab('overview')">Overview</button>
+    <button class="dash-tab" onclick="showTab('track')">Track</button>
+    <button class="dash-tab" onclick="showTab('leaderboard')">Leaderboard</button>
+    <button class="dash-tab" onclick="showTab('edu')">Learn</button>
+  </div>
+  <div class="dash-nav-right">
+    <div class="streak-badge">🔥 <span id="navStreak">0</span> day streak</div>
+    <div class="user-avatar" id="navUser">🌿 —</div>
+    <button class="dash-logout" onclick="logout()">Log out</button>
+  </div>
+</nav>
+
+<main class="dash-main">
+
+  <!-- ===== OVERVIEW TAB ===== -->
+  <div id="tab-overview" class="tab-content active">
+    <div class="stats-row">
+      <div class="stat-card green">
+        <div class="stat-icon">⭐</div>
+        <div class="stat-info">
+          <div class="stat-value" id="statPoints">0</div>
+          <div class="stat-label">Eco Points</div>
+        </div>
+        <div class="progress-bar" id="statProgressBar" style="--w:0%;--clr:#16a34a"></div>
+        <div class="stat-sub" id="statBadgeNext">Eco Beginner — earn 101 pts to unlock Green Warrior</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-icon">🔥</div>
+        <div class="stat-info">
+          <div class="stat-value" id="statStreak">0</div>
+          <div class="stat-label">Day Streak</div>
+        </div>
+        <div class="stat-sub" id="statStreakSub">Log today to start your streak!</div>
+      </div>
+      <div class="stat-card teal">
+        <div class="stat-icon">💧</div>
+        <div class="stat-info">
+          <div class="stat-value" id="statWater">0</div>
+          <div class="stat-label">Water Logs</div>
+        </div>
+        <div class="stat-sub">Total water entries</div>
+      </div>
+      <div class="stat-card amber">
+        <div class="stat-icon">⚡</div>
+        <div class="stat-info">
+          <div class="stat-value" id="statLogs">0</div>
+          <div class="stat-label">Total Logs</div>
+        </div>
+        <div class="stat-sub">Across all categories</div>
+      </div>
+    </div>
+    <div class="dash-section">
+      <div class="dash-section-title">Your Badge Progress</div>
+      <div class="badges-row" id="badgesRow"></div>
+    </div>
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title">Last 7 Days — Eco Points</div>
+        <div class="chart-area" id="barChartArea"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Activity Breakdown</div>
+        <div class="pie-wrapper" id="pieWrapper"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Today's Challenges</div>
+        <div class="challenges-list" id="challengesList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TRACK TAB ===== -->
+  <div id="tab-track" class="tab-content">
+    <div class="track-header">
+      <h2>Log Today's Activities</h2>
+      <p>Answer a few quick questions — we'll calculate your eco impact and compare it to yesterday.</p>
+    </div>
+    <div class="track-grid">
+
+      <!-- WATER -->
+      <div class="track-card">
+        <div class="track-card-header" style="--tc:#2563eb">
+          <div class="track-icon">💧</div>
+          <div><h3>Water</h3><small>How did you use water today?</small></div>
+        </div>
+        <div class="track-form">
+          <div class="q-block">
+            <span class="q-label">Did you shower or bathe in a bucket today?</span>
+            <div class="q-options">
+              <div class="q-option selected" onclick="pickW('bathType','shower',this)">🚿 Shower</div>
+              <div class="q-option" onclick="pickW('bathType','bucket',this)">🪣 Bucket bath ♻️</div>
+              <div class="q-option" onclick="pickW('bathType','bath',this)">🛁 Long bath</div>
+              <div class="q-option" onclick="pickW('bathType','none',this)">🚫 Neither today</div>
+            </div>
+          </div>
+
+          <div class="q-block" id="wShowerBlock">
+            <span class="q-label">How many minutes did you do so? <span class="slider-val" id="wMinsVal">8 min</span></span>
+            <input type="range" min="1" max="30" value="8" class="eco-slider" id="wMinsSlider"
+              oninput="WS.showerMinutes=+this.value; document.getElementById('wMinsVal').textContent=this.value+' min'"/>
+          </div>
+
+          <div class="q-block hidden" id="wBucketBlock">
+            <span class="q-label">How full was the bucket?</span>
+            <div class="q-options">
+              <div class="q-option selected" onclick="pickW('bucketSize','small',this)">Small ~10L</div>
+              <div class="q-option" onclick="pickW('bucketSize','medium',this)">Medium ~20L</div>
+              <div class="q-option" onclick="pickW('bucketSize','full',this)">Full ~30L</div>
+            </div>
+          </div>
+
+          <div class="q-divider"></div>
+
+          <div class="q-block">
+            <span class="q-label">Did you keep the tap running while brushing your teeth?</span>
+            <div class="q-options">
+              <div class="q-option" onclick="pickW('tapRunning','yes',this)">😬 Yes, I did</div>
+              <div class="q-option selected" onclick="pickW('tapRunning','no',this)">✅ No, I turned it off</div>
+            </div>
+          </div>
+
+          <div class="q-block">
+            <span class="q-label">Any laundry today?</span>
+            <div class="q-options">
+              <div class="q-option selected" onclick="pickW('laundry','no',this)">No</div>
+              <div class="q-option" onclick="pickW('laundry','yes',this)">Yes, one load</div>
+            </div>
+          </div>
+
+          <button class="log-btn" onclick="logResource('water')">Log Water</button>
+        </div>
+      </div>
+
+      <!-- ENERGY -->
+      <div class="track-card">
+        <div class="track-card-header" style="--tc:#ca8a04">
+          <div class="track-icon">⚡</div>
+          <div><h3>Electricity</h3><small>How did you use energy today?</small></div>
+        </div>
+        <div class="track-form">
+          <div class="q-block">
+            <span class="q-label">How many devices did you leave on standby or idle today?</span>
+            <div class="q-options">
+              <div class="q-option selected" onclick="pickE('deviceCount',0,this)">None ✅</div>
+              <div class="q-option" onclick="pickE('deviceCount',1,this)">1 device</div>
+              <div class="q-option" onclick="pickE('deviceCount',2,this)">2 devices</div>
+              <div class="q-option" onclick="pickE('deviceCount',3,this)">3 or more ❌</div>
+            </div>
+          </div>
+
+          <div class="q-block">
+            <span class="q-label">Did you use air conditioning or a heater today?</span>
+            <div class="q-options">
+              <div class="q-option" onclick="pickE('acHeater','yes',this)">Yes</div>
+              <div class="q-option selected" onclick="pickE('acHeater','no',this)">No ✅</div>
+            </div>
+          </div>
+
+          <div class="q-block">
+            <span class="q-label">Does your home use LED or energy-saving bulbs?</span>
+            <div class="q-options">
+              <div class="q-option selected" onclick="pickE('ledBulbs','yes',this)">Yes 💡</div>
+              <div class="q-option" onclick="pickE('ledBulbs','no',this)">No</div>
+            </div>
+          </div>
+
+          <button class="log-btn energy" onclick="logResource('energy')">Log Energy</button>
+        </div>
+      </div>
+
+      <!-- TRAVEL -->
+      <div class="track-card">
+        <div class="track-card-header" style="--tc:#16a34a">
+          <div class="track-icon">🚗</div>
+          <div><h3>Travel</h3><small>How did you get around today?</small></div>
+        </div>
+        <div class="track-form">
+          <div class="q-block">
+            <span class="q-label">What was your main mode of travel today?</span>
+            <div class="q-options">
+              <div class="q-option selected" onclick="pickT('mode','walk',this)">🚶 Walked</div>
+              <div class="q-option" onclick="pickT('mode','cycle',this)">🚲 Cycled</div>
+              <div class="q-option" onclick="pickT('mode','bus',this)">🚌 Bus / Metro</div>
+              <div class="q-option" onclick="pickT('mode','car',this)">🚗 Car / Bike</div>
+              <div class="q-option" onclick="pickT('mode','home',this)">🏠 Stayed home</div>
+            </div>
+          </div>
+
+          <div class="q-block hidden" id="tDistBlock">
+            <span class="q-label">Roughly how far did you travel? <span class="slider-val" id="tDistVal">3 km</span></span>
+            <input type="range" min="1" max="60" value="3" class="eco-slider" id="tDistSlider"
+              oninput="TS.distance=+this.value; document.getElementById('tDistVal').textContent=this.value+' km'"/>
+          </div>
+
+          <button class="log-btn travel" onclick="logResource('travel')">Log Travel</button>
+        </div>
+      </div>
+
+      <!-- FOOD -->
+      <div class="track-card">
+        <div class="track-card-header" style="--tc:#db2777">
+          <div class="track-icon">🥗</div>
+          <div><h3>Food</h3><small>What did you eat today?</small></div>
+        </div>
+        <div class="track-form">
+          <div class="q-block">
+            <span class="q-label">What best describes your meals today?</span>
+            <div class="q-options">
+              <div class="q-option" onclick="pickF('mealType','vegan',this)">🥗 All vegan</div>
+              <div class="q-option selected" onclick="pickF('mealType','veggie',this)">🌱 Vegetarian</div>
+              <div class="q-option" onclick="pickF('mealType','mixed',this)">🍗 Mixed (some meat)</div>
+              <div class="q-option" onclick="pickF('mealType','meat',this)">🥩 Mostly meat</div>
+            </div>
+          </div>
+
+          <div class="q-block">
+            <span class="q-label">Did you waste any food today?</span>
+            <div class="q-options">
+              <div class="q-option selected" onclick="pickF('foodWaste','none',this)">❌ None — finished it all</div>
+              <div class="q-option" onclick="pickF('foodWaste','little',this)">⚠️ A little</div>
+              <div class="q-option" onclick="pickF('foodWaste','alot',this)">🗑️ Quite a bit</div>
+            </div>
+          </div>
+
+          <div class="q-block">
+            <span class="q-label">Did you eat any locally grown or organic food?</span>
+            <div class="q-options">
+              <div class="q-option" onclick="pickF('localFood','yes',this)">🌾 Yes!</div>
+              <div class="q-option selected" onclick="pickF('localFood','no',this)">No</div>
+            </div>
+          </div>
+
+          <button class="log-btn food" onclick="logResource('food')">Log Food</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== LEADERBOARD TAB ===== -->
+  <div id="tab-leaderboard" class="tab-content">
+    <div class="track-header">
+      <h2>Leaderboard 🏆</h2>
+      <p id="lbSubtitle">See how you rank in your city, district, zone, and nation.</p>
+    </div>
+    <div class="lb-location-tabs">
+      <button class="lb-loc-tab active" onclick="showLbLevel('city',this)">🏙️ My City</button>
+      <button class="lb-loc-tab" onclick="showLbLevel('district',this)">🗺️ District</button>
+      <button class="lb-loc-tab" onclick="showLbLevel('zone',this)">🌐 Zone</button>
+      <button class="lb-loc-tab" onclick="showLbLevel('nation',this)">🌏 Nation</button>
+    </div>
+    <div class="lb-level-badge" id="lbLevelBadge">🏙️ City Level</div>
+    <div class="leaderboard-wrapper">
+      <div class="lb-podium" id="lbPodium"></div>
+      <div class="lb-list"   id="lbList"></div>
+    </div>
+  </div>
+
+  <!-- ===== LEARN TAB ===== -->
+  <div id="tab-edu" class="tab-content">
+    <div class="track-header">
+      <h2>Education Hub 📚</h2>
+      <p>Watch videos, read articles, and take quizzes — earn pts for every session.</p>
+    </div>
+    <div class="edu-grid">
+      <div class="edu-card" style="cursor:pointer" onclick="openLearn('video','water crisis 2025 documentary')">
+        <div class="edu-thumb">🌊</div>
+        <div class="edu-info"><h4>Water Crisis 2025</h4><p>Why freshwater scarcity is the defining challenge of our decade.</p>
+          <div class="edu-meta"><span class="edu-tag">▶ YouTube</span><span class="edu-pts">+15 pts</span></div></div>
+      </div>
+      <div class="edu-card" style="cursor:pointer" onclick="openLearn('article','solar energy basics for students explained')">
+        <div class="edu-thumb">☀️</div>
+        <div class="edu-info"><h4>Solar Energy Basics</h4><p>How photovoltaic cells work and why they are the future of power.</p>
+          <div class="edu-meta"><span class="edu-tag">📰 Article</span><span class="edu-pts">+10 pts</span></div></div>
+      </div>
+      <div class="edu-card" style="cursor:pointer" onclick="openLearn('quiz','Climate Change and Global Warming')">
+        <div class="edu-thumb">🌡️</div>
+        <div class="edu-info"><h4>Climate Change Quiz</h4><p>Test your knowledge on global warming, carbon cycles and more.</p>
+          <div class="edu-meta"><span class="edu-tag">🧩 AI Quiz</span><span class="edu-pts">+25 pts</span></div></div>
+      </div>
+      <div class="edu-card" style="cursor:pointer" onclick="openLearn('article','carbon footprint 101 for students')">
+        <div class="edu-thumb">🌱</div>
+        <div class="edu-info"><h4>Carbon Footprint 101</h4><p>Understanding your personal carbon emissions and how to reduce them.</p>
+          <div class="edu-meta"><span class="edu-tag">📰 Article</span><span class="edu-pts">+10 pts</span></div></div>
+      </div>
+      <div class="edu-card" style="cursor:pointer" onclick="openLearn('video','ocean plastic crisis documentary')">
+        <div class="edu-thumb">🐠</div>
+        <div class="edu-info"><h4>Ocean Plastic Crisis</h4><p>8 million tonnes enter our oceans every year. What can we do?</p>
+          <div class="edu-meta"><span class="edu-tag">▶ YouTube</span><span class="edu-pts">+15 pts</span></div></div>
+      </div>
+      <div class="edu-card" style="cursor:pointer" onclick="openLearn('quiz','Ocean Conservation and Marine Biodiversity')">
+        <div class="edu-thumb">🌳</div>
+        <div class="edu-info"><h4>Biodiversity Quiz</h4><p>How well do you know the living world? Test yourself now!</p>
+          <div class="edu-meta"><span class="edu-tag">🧩 AI Quiz</span><span class="edu-pts">+25 pts</span></div></div>
+      </div>
+      <div class="edu-card" style="cursor:pointer" onclick="openLearn('article','reforestation projects worldwide success stories')">
+        <div class="edu-thumb">🌲</div>
+        <div class="edu-info"><h4>Reforestation Projects</h4><p>How planting trees is helping restore lost biodiversity worldwide.</p>
+          <div class="edu-meta"><span class="edu-tag">📰 Article</span><span class="edu-pts">+10 pts</span></div></div>
+      </div>
+      <div class="edu-card" style="cursor:pointer" onclick="openLearn('quiz','Renewable Energy Sources Solar Wind Hydro')">
+        <div class="edu-thumb">⚡</div>
+        <div class="edu-info"><h4>Renewable Energy Quiz</h4><p>Solar, wind, hydro — how much do you really know about clean energy?</p>
+          <div class="edu-meta"><span class="edu-tag">🧩 AI Quiz</span><span class="edu-pts">+25 pts</span></div></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- FEEDBACK PANEL (bottom sheet after logging) -->
+<div class="feedback-overlay" id="feedbackOverlay" onclick="handleFbClick(event)">
+  <div class="feedback-panel">
+    <div class="feedback-handle"></div>
+    <div class="feedback-type-label" id="fbTypeLabel"></div>
+    <div class="feedback-total" id="fbTotal">+0</div>
+    <div class="feedback-subtitle" id="fbSubtitle">eco points</div>
+    <div class="feedback-vs-yesterday" id="fbVsYesterday" style="display:none"></div>
+    <div class="feedback-rows" id="fbRows"></div>
+    <div class="feedback-tip" id="fbTip"></div>
+    <button class="feedback-close-btn" onclick="closeFeedback()">Got it! Keep going 🌿</button>
+  </div>
+</div>
+
+<!-- AI CHATBOT -->
+<div class="chatbot-bubble" onclick="toggleChat()">
+  <span class="chatbot-icon">🤖</span>
+  <span class="chatbot-label">Eco AI</span>
+</div>
+<div class="chatbot-window" id="chatWindow">
+  <div class="chat-header">
+    <div class="chat-header-left">
+      <span class="chat-ai-avatar">🌿</span>
+      <div><strong>EcoBot</strong><div class="chat-status">● Online</div></div>
+    </div>
+    <button class="chat-close" onclick="toggleChat()">✕</button>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="chat-msg ai">
+      <div class="msg-bubble">Hi! I'm EcoBot 🌱 Ask me anything about sustainability, climate change, or your eco habits. I can also quiz you!</div>
+    </div>
+  </div>
+  <div class="chat-input-row">
+    <div class="chat-input-wrap">
+      <input type="text" id="chatInput" placeholder="Ask EcoBot anything..." class="chat-input" onkeydown="if(event.key==='Enter')sendMessage()"/>
+      <button onclick="sendMessage()" class="chat-send-btn">➤</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// =====================================================================
+//  CONSTANTS
+// =====================================================================
+function getGroqKey() { return localStorage.getItem('eco_groq_key') || ''; }
+function saveGroqKey(k) { localStorage.setItem('eco_groq_key', k.trim()); }
+function openApiKeyModal() { document.getElementById('apiKeyModal').classList.add('open'); }
+function closeApiKeyModal() { document.getElementById('apiKeyModal').classList.remove('open'); }
+function submitApiKey() {
+  const k = document.getElementById('apiKeyInput').value.trim();
+  if (!k) { document.getElementById('apiKeyError').textContent = 'Please paste your Groq API key.'; return; }
+  saveGroqKey(k);
+  document.getElementById('apiKeyError').textContent = '';
+  closeApiKeyModal();
+  appendMessage('✅ API key saved! Ask me anything about eco topics.', 'ai');
+}
+
+const BADGES = [
+  { id:'beginner',    emoji:'🌱', name:'Eco Beginner',    minPts:0    },
+  { id:'warrior',     emoji:'♻️', name:'Green Warrior',   minPts:101  },
+  { id:'guardian',    emoji:'🌳', name:'Nature Guardian', minPts:501  },
+  { id:'champion',    emoji:'🌍', name:'Earth Champion',  minPts:1000 },
+  { id:'energysaver', emoji:'⚡', name:'Energy Saver',    minPts:200  },
+  { id:'waterhero',   emoji:'💧', name:'Water Hero',      minPts:150  },
+];
+
+const CHALLENGES = [
+  { id:'short_shower', title:'5-min shower or bucket bath', pts:20, icon:'🚿' },
+  { id:'walk_cycle',   title:'Walk or cycle to school',     pts:30, icon:'🚲' },
+  { id:'veg_meal',     title:'Eat a vegetarian meal',       pts:25, icon:'🥗' },
+  { id:'turn_off',     title:'Turn off all idle devices',   pts:15, icon:'⚡' },
+  { id:'reuse_bag',    title:'Use a reusable bag',          pts:15, icon:'🛍️' },
+];
+
+const LB_DATA = {
+  city:     [{ name:'Rohit Sharma',pts:720,emoji:'🌍'},{name:'Anjali Verma',pts:580,emoji:'🌳'},{name:'Kunal Mehta',pts:430,emoji:'♻️'},{name:'Sanya Gupta',pts:310,emoji:'🌱'},{name:'Ishaan Rao',pts:240,emoji:'🌱'}],
+  district: [{ name:'Priya Nair',pts:1050,emoji:'🌍'},{name:'Arjun Pillai',pts:890,emoji:'🌳'},{name:'Deepika Seth',pts:760,emoji:'🌳'},{name:'Ravi Krishnan',pts:620,emoji:'♻️'},{name:'Tanya Singh',pts:490,emoji:'♻️'},{name:'Mohan Das',pts:370,emoji:'🌱'},{name:'Preethi Kumar',pts:280,emoji:'🌱'},{name:'Nikhil Joshi',pts:190,emoji:'🌱'}],
+  zone:     [{ name:'Aditya Kapoor',pts:2400,emoji:'🌍'},{name:'Shreya Mishra',pts:2100,emoji:'🌍'},{name:'Rahul Bose',pts:1870,emoji:'🌳'},{name:'Kavita Iyer',pts:1620,emoji:'🌳'},{name:'Sameer Khan',pts:1390,emoji:'🌳'},{name:'Divya Patel',pts:1180,emoji:'♻️'},{name:'Amit Thakur',pts:980,emoji:'♻️'},{name:'Neha Banerjee',pts:810,emoji:'♻️'},{name:'Vijay Reddy',pts:650,emoji:'🌱'},{name:'Pooja Sharma',pts:520,emoji:'🌱'}],
+  nation:   [{ name:'Varun Malhotra',pts:5800,emoji:'🌍'},{name:'Kritika Sen',pts:5200,emoji:'🌍'},{name:'Aarav Chandra',pts:4750,emoji:'🌍'},{name:'Meghna Iyer',pts:4300,emoji:'🌍'},{name:'Siddharth Rao',pts:3900,emoji:'🌳'},{name:'Anushka Tiwari',pts:3500,emoji:'🌳'},{name:'Karan Malviya',pts:3100,emoji:'🌳'},{name:'Riya Chatterjee',pts:2700,emoji:'🌳'},{name:'Dev Soni',pts:2400,emoji:'♻️'},{name:'Tanvi Bhat',pts:2050,emoji:'♻️'},{name:'Manish Pandey',pts:1700,emoji:'♻️'},{name:'Sakshi Dubey',pts:1400,emoji:'♻️'}],
+};
+
+// =====================================================================
+//  FORM STATE  (default values shown in the forms above)
+// =====================================================================
+const WS = { bathType:'shower', showerMinutes:8, bucketSize:'medium', tapRunning:'no', laundry:'no' };
+const ES = { deviceCount:0, acHeater:'no', ledBulbs:'yes' };
+const TS = { mode:'walk', distance:3 };
+const FS = { mealType:'veggie', foodWaste:'none', localFood:'no' };
+
+// Q-option picker helpers
+function pickW(key, val, el) {
+  WS[key] = val;
+  el.closest('.q-options').querySelectorAll('.q-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  if (key === 'bathType') {
+    document.getElementById('wShowerBlock').classList.toggle('hidden', val !== 'shower' && val !== 'bath');
+    document.getElementById('wBucketBlock').classList.toggle('hidden', val !== 'bucket');
+  }
+}
+function pickE(key, val, el) {
+  ES[key] = val;
+  el.closest('.q-options').querySelectorAll('.q-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function pickT(key, val, el) {
+  TS[key] = val;
+  el.closest('.q-options').querySelectorAll('.q-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  if (key === 'mode') {
+    document.getElementById('tDistBlock').classList.toggle('hidden', val === 'walk' || val === 'home');
+  }
+}
+function pickF(key, val, el) {
+  FS[key] = val;
+  el.closest('.q-options').querySelectorAll('.q-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// =====================================================================
+//  DATA HELPERS
+// =====================================================================
+function getUsers()  { try { return JSON.parse(localStorage.getItem('eco_users') || '{}'); } catch(e) { return {}; } }
+function saveUsers(u){ localStorage.setItem('eco_users', JSON.stringify(u)); }
+function getCurrentEmail() { return localStorage.getItem('eco_current'); }
+function getUser()   { const e = getCurrentEmail(); return e ? (getUsers()[e] || null) : null; }
+function saveUser(u) { const all = getUsers(); all[u.email] = u; saveUsers(all); }
+function today()     { return new Date().toISOString().split('T')[0]; }
+function logout()    { localStorage.removeItem('eco_current'); window.location.href = 'index.html'; }
+
+function getYesterdayLog(user, type) {
+  const y = new Date(); y.setDate(y.getDate() - 1);
+  const yStr = y.toISOString().split('T')[0];
+  const yLogs = (user.logs || []).filter(l => l.date === yStr && l.type === type);
+  return yLogs.length ? yLogs[yLogs.length - 1] : null;
+}
+
+// =====================================================================
+//  AUTH GUARD
+// =====================================================================
+(function() {
+  if (!getCurrentEmail() || !getUser()) {
+    localStorage.removeItem('eco_current'); // clear stale session before redirecting
+    window.location.replace('index.html');
+  }
+})();
+
+// =====================================================================
+//  BADGE HELPERS
+// =====================================================================
+function getCurrentBadge(pts) {
+  if (pts >= 1000) return BADGES[3];
+  if (pts >= 501)  return BADGES[2];
+  if (pts >= 101)  return BADGES[1];
+  return BADGES[0];
+}
+function getNextBadge(pts) {
+  if (pts >= 1000) return null;
+  if (pts >= 501)  return BADGES[3];
+  if (pts >= 101)  return BADGES[2];
+  return BADGES[1];
+}
+
+// =====================================================================
+//  STREAK
+// =====================================================================
+function processStreak(user) {
+  const t = today();
+  if (user.lastLogDate === t) return;
+  const y = new Date(); y.setDate(y.getDate() - 1);
+  const yStr = y.toISOString().split('T')[0];
+  user.streak    = (user.lastLogDate === yStr) ? (user.streak || 0) + 1 : 1;
+  user.lastLogDate = t;
+}
+
+// =====================================================================
+//  POINT CALCULATION WITH THRESHOLDS & COMPARISON
+// =====================================================================
+
+function calcWater(prev) {
+  const rows = []; let pts = 0;
+  const v = WS;
+
+  if (v.bathType === 'bucket') {
+    pts += 18;
+    rows.push({ t:'🪣 Bucket bath — eco champion choice!', c:+18 });
+    if (v.bucketSize === 'small')  rows.push({ t:'Small bucket (~10L) — minimal usage!', c:0 });
+  } else if (v.bathType === 'shower') {
+    const m = +v.showerMinutes || 8;
+    if      (m <= 5)  { pts += 20; rows.push({ t:`⚡ ${m}-min shower — super quick!`, c:+20 }); }
+    else if (m <= 8)  { pts += 14; rows.push({ t:`✅ ${m}-min shower — good length`, c:+14 }); }
+    else if (m <= 12) { pts += 6;  rows.push({ t:`⚠️ ${m}-min shower — try to stay below 8 min`, c:+6 }); }
+    else              { pts -= 6;  rows.push({ t:`❌ ${m}-min shower — over the 12 min threshold`, c:-6 }); }
+
+    // Comparison vs yesterday
+    if (prev && prev.v && prev.v.bathType === 'shower') {
+      const pm = +prev.v.showerMinutes || 8;
+      if (m > pm && m > 8) {
+        pts -= 6; rows.push({ t:`📈 Shower increased from ${pm} min yesterday — try to improve`, c:-6 });
+      } else if (m < pm) {
+        pts += 6; rows.push({ t:`📉 Shorter shower than yesterday (${pm} min) — great improvement!`, c:+6 });
+      } else if (m === pm && m <= 8) {
+        rows.push({ t:`🔁 Same shower time as yesterday (${pm} min) — within threshold`, c:0 });
+      } else if (m === pm && m > 8) {
+        pts -= 3; rows.push({ t:`🔁 Same (above-threshold) shower time as yesterday — no improvement`, c:-3 });
+      }
+    }
+  } else if (v.bathType === 'bath') {
+    pts -= 8; rows.push({ t:'🛁 Long bath — uses ~150L of water', c:-8 });
+    if (prev && prev.v && prev.v.bathType === 'bath') {
+      pts -= 5; rows.push({ t:'🛁 Long bath two days in a row — try switching to shower', c:-5 });
+    }
+  } else {
+    pts += 5; rows.push({ t:'🚫 No bathing today — minimal water use', c:+5 });
+  }
+
+  if (v.tapRunning === 'yes') {
+    pts -= 5; rows.push({ t:'🚰 Tap running while brushing — wastes 8L per session', c:-5 });
+    if (prev && prev.v && prev.v.tapRunning === 'yes') {
+      pts -= 3; rows.push({ t:'🚰 Tap running again today — this is a habit to break!', c:-3 });
+    }
+  } else {
+    pts += 4; rows.push({ t:'✅ Tap off while brushing — good habit!', c:+4 });
+  }
+
+  if (v.laundry === 'yes') {
+    if (prev && prev.v && prev.v.laundry === 'yes') {
+      pts -= 5; rows.push({ t:'👕 Laundry two days in a row — try to batch into one day', c:-5 });
+    } else {
+      rows.push({ t:'👕 Laundry logged today', c:0 });
+    }
+  }
+
+  const tips = [
+    v.bathType === 'shower' && v.showerMinutes > 10 ? '💡 Challenge: try a 7-minute shower tomorrow and see how it feels!' :
+    v.bathType === 'bucket' ? '💡 Amazing! Bucket baths use 5× less water than showers — you saved roughly 50L today.' :
+    v.tapRunning === 'yes' ? '💡 Turning off the tap while brushing teeth saves up to 8 litres per brush!' :
+    '💡 Collecting the cold water while waiting for hot water in the shower is a great way to water plants!',
+  ];
+  return { pts: Math.max(2, pts), rows, tip: tips[0] };
+}
+
+function calcEnergy(prev) {
+  const rows = []; let pts = 0;
+  const v = ES;
+  const dc = +v.deviceCount || 0;
+
+  if      (dc === 0) { pts += 12; rows.push({ t:'⚡ No devices on standby — excellent!', c:+12 }); }
+  else if (dc === 1) { pts += 6;  rows.push({ t:'🔌 1 device on standby — try to reach zero', c:+6 }); }
+  else if (dc === 2) { pts += 0;  rows.push({ t:'🔌 2 devices on standby — above the good threshold', c:0 }); }
+  else               { pts -= 8;  rows.push({ t:'🔌 3+ devices on standby — significant wasted energy', c:-8 }); }
+
+  // Comparison
+  if (prev && prev.v && prev.v.deviceCount !== undefined) {
+    const pd = +prev.v.deviceCount || 0;
+    if (dc > pd && dc > 1) {
+      pts -= 6; rows.push({ t:`📈 More devices on standby than yesterday (${pd}) — worsened`, c:-6 });
+    } else if (dc < pd) {
+      pts += 6; rows.push({ t:`📉 Fewer devices than yesterday (${pd}) — great improvement!`, c:+6 });
+    } else if (dc === pd && dc > 1) {
+      pts -= 3; rows.push({ t:`🔁 Same number of standby devices as yesterday — no improvement`, c:-3 });
+    }
+  }
+
+  if (v.acHeater === 'yes') {
+    pts -= 8; rows.push({ t:'❄️ AC or heater used — high energy consumption', c:-8 });
+    if (prev && prev.v && prev.v.acHeater === 'yes') {
+      pts -= 4; rows.push({ t:'❄️ AC/heater two days in a row — consider natural ventilation', c:-4 });
+    }
+  } else {
+    pts += 6; rows.push({ t:'✅ No AC or heater used today — great!', c:+6 });
+  }
+
+  if (v.ledBulbs === 'yes') {
+    pts += 5; rows.push({ t:'💡 LED bulbs — smart and energy-efficient choice!', c:+5 });
+  }
+
+  const tips = [
+    v.acHeater === 'yes' ? '💡 A wet cloth and fan use up to 90% less energy than an AC unit.' :
+    dc > 1 ? '💡 Plug all devices into one power strip and switch it off before bed — one action, zero standby.' :
+    '💡 Unplugging phone chargers when not in use can save up to 10% on your electricity bill.',
+  ];
+  return { pts: Math.max(2, pts), rows, tip: tips[0] };
+}
+
+function calcTravel(prev) {
+  const rows = []; let pts = 0;
+  const v = TS;
+  const dist = +v.distance || 3;
+
+  if (v.mode === 'walk') {
+    pts += 22; rows.push({ t:'🚶 Walked — zero emissions, great for health!', c:+22 });
+  } else if (v.mode === 'cycle') {
+    pts += 22; rows.push({ t:'🚲 Cycled — zero emissions & exercise in one!', c:+22 });
+  } else if (v.mode === 'home') {
+    pts += 18; rows.push({ t:'🏠 Stayed home — minimal travel footprint!', c:+18 });
+  } else if (v.mode === 'bus') {
+    pts += 12; rows.push({ t:'🚌 Bus/Metro — shared transport is smart!', c:+12 });
+  } else if (v.mode === 'car') {
+    if      (dist <= 5)  { pts += 3;  rows.push({ t:`🚗 Car for ${dist} km — short trip, still adds up`, c:+3 }); }
+    else if (dist <= 15) { pts -= 4;  rows.push({ t:`🚗 Car for ${dist} km — consider the bus next time`, c:-4 }); }
+    else                 { pts -= 10; rows.push({ t:`🚗 Car for ${dist} km — high-emission trip`, c:-10 }); }
+  }
+
+  // Comparison
+  const greenModes  = ['walk','cycle','home'];
+  const okModes     = ['bus'];
+  if (prev && prev.v) {
+    const pm = prev.v.mode;
+    if (v.mode === 'car' && greenModes.includes(pm)) {
+      pts -= 6; rows.push({ t:`📈 Yesterday you ${pm === 'home' ? 'stayed home' : pm + 'ed'} — today you drove instead`, c:-6 });
+    } else if (greenModes.includes(v.mode) && v.mode !== 'home' && !greenModes.includes(pm)) {
+      pts += 6; rows.push({ t:'📉 Switched to greener transport than yesterday — brilliant!', c:+6 });
+    } else if (v.mode === 'car' && pm === 'car') {
+      const pd = +prev.v.distance || 3;
+      if (dist > pd) {
+        pts -= 4; rows.push({ t:`📈 Drove further than yesterday (${pd} km) — try to shorten the trip`, c:-4 });
+      } else if (dist < pd) {
+        pts += 4; rows.push({ t:`📉 Shorter car trip than yesterday (${pd} km) — improvement!`, c:+4 });
+      }
+    }
+  }
+
+  const tips = [
+    v.mode === 'car' ? '💡 Carpooling just 2 days a week halves your travel-related emissions.' :
+    v.mode === 'bus' ? '💡 Bus travel emits roughly 4× less CO₂ per km than a private car.' :
+    '💡 You\'re already a green travel champion! Your daily choice makes a real difference.',
+  ];
+  return { pts: Math.max(2, pts), rows, tip: tips[0] };
+}
+
+function calcFood(prev) {
+  const rows = []; let pts = 0;
+  const v = FS;
+  const mPts = { vegan:20, veggie:15, mixed:8, meat:3 };
+  const mLabel = {
+    vegan:'🥗 All vegan meals — lowest possible footprint!',
+    veggie:'🌱 Vegetarian meals — great eco choice!',
+    mixed:'🍗 Mixed meals — try adding one more veggie day this week',
+    meat:'🥩 Meat-heavy diet — high carbon footprint'
+  };
+  pts += mPts[v.mealType] || 8;
+  rows.push({ t: mLabel[v.mealType], c: mPts[v.mealType] || 8 });
+
+  // Comparison vs yesterday
+  const order = ['meat','mixed','veggie','vegan'];
+  if (prev && prev.v && prev.v.mealType) {
+    const ti = order.indexOf(v.mealType), pi = order.indexOf(prev.v.mealType);
+    if (ti > pi) {
+      pts += 6; rows.push({ t:'📉 Healthier meal choice than yesterday — excellent!', c:+6 });
+    } else if (ti < pi) {
+      pts -= 4; rows.push({ t:'📈 Less eco-friendly meals than yesterday', c:-4 });
+    } else if (v.mealType === 'meat' && prev.v.mealType === 'meat') {
+      pts -= 6; rows.push({ t:'🥩 Meat-heavy two days in a row — try legumes or tofu tomorrow!', c:-6 });
+    }
+  }
+
+  if (v.foodWaste === 'none') {
+    pts += 5; rows.push({ t:'✅ Zero food waste — perfect!', c:+5 });
+  } else if (v.foodWaste === 'little') {
+    rows.push({ t:'⚠️ A little food waste — try to reduce further', c:0 });
+  } else {
+    pts -= 5; rows.push({ t:'❌ Significant food waste — plan meals more carefully', c:-5 });
+    if (prev && prev.v && prev.v.foodWaste === 'alot') {
+      pts -= 3; rows.push({ t:'🗑️ Food waste two days in a row — needs immediate attention', c:-3 });
+    }
+  }
+
+  if (v.localFood === 'yes') {
+    pts += 5; rows.push({ t:'🌾 Local/organic food — supports farmers & cuts transport emissions!', c:+5 });
+  }
+
+  const tips = [
+    v.mealType === 'meat' ? '💡 Replacing one meat meal per week with legumes saves ~50 kg of CO₂ per year!' :
+    v.foodWaste === 'alot' ? '💡 Planning meals ahead and freezing leftovers can cut your food waste by 50%.' :
+    v.localFood === 'yes' ? '💡 Local food travels 95% fewer kilometres than imported food — you\'re making a real impact!' :
+    '💡 A fully plant-based diet can reduce your food carbon footprint by up to 73%.',
+  ];
+  return { pts: Math.max(2, pts), rows, tip: tips[0] };
+}
+
+// =====================================================================
+//  LOG RESOURCE (central function)
+// =====================================================================
+function logResource(type) {
+  const user = getUser();
+  if (!user) return;
+
+  const prev    = getYesterdayLog(user, type);
+  const calcFns = { water: calcWater, energy: calcEnergy, travel: calcTravel, food: calcFood };
+  const result  = calcFns[type](prev);
+
+  processStreak(user);
+  user.points = (user.points || 0) + result.pts;
+  if (!user.logs) user.logs = [];
+
+  const values = type === 'water' ? {...WS} : type === 'energy' ? {...ES} : type === 'travel' ? {...TS} : {...FS};
+  user.logs.push({ date: today(), type, points: result.pts, v: values });
+  saveUser(user);
+  renderAll();
+  showFeedback(type, result.pts, result.rows, result.tip, prev);
+}
+
+// =====================================================================
+//  FEEDBACK PANEL
+// =====================================================================
+function showFeedback(type, pts, rows, tip, prev) {
+  const icons   = { water:'💧', energy:'⚡', travel:'🚗', food:'🥗' };
+  const total   = document.getElementById('fbTotal');
+  const sub     = document.getElementById('fbSubtitle');
+  const rowsEl  = document.getElementById('fbRows');
+  const tipEl   = document.getElementById('fbTip');
+  const vsEl    = document.getElementById('fbVsYesterday');
+  const typeEl  = document.getElementById('fbTypeLabel');
+
+  typeEl.textContent = icons[type] + ' ' + type.toUpperCase() + ' LOGGED';
+  const sign = pts > 0 ? '+' : '';
+  total.textContent = sign + pts + ' pts';
+  total.className   = 'feedback-total ' + (pts > 0 ? 'positive' : pts < 0 ? 'negative' : 'neutral');
+  sub.textContent   = pts > 0 ? 'eco points earned today 🎉' : pts < 0 ? 'points adjusted for high usage' : 'logged — keep tracking!';
+
+  if (prev) {
+    vsEl.style.display = 'flex';
+    vsEl.textContent   = '📅 Compared to your ' + type + ' log from yesterday';
+  } else {
+    vsEl.style.display = 'none';
+  }
+
+  rowsEl.innerHTML = rows.map(r => `
+    <div class="feedback-row">
+      <span class="feedback-row-text">${r.t}</span>
+      <span class="feedback-row-pts ${r.c > 0 ? 'pos' : r.c < 0 ? 'neg' : 'neu'}">${r.c > 0 ? '+' + r.c : r.c !== 0 ? r.c : '—'}</span>
+    </div>`).join('');
+
+  tipEl.textContent = tip;
+  document.getElementById('feedbackOverlay').classList.add('open');
+}
+
+function closeFeedback() { document.getElementById('feedbackOverlay').classList.remove('open'); }
+function handleFbClick(e) { if (e.target.id === 'feedbackOverlay') closeFeedback(); }
+
+// =====================================================================
+//  RENDER FUNCTIONS
+// =====================================================================
+function renderNavBar(user) {
+  document.getElementById('navStreak').textContent = user.streak || 0;
+  document.getElementById('navUser').textContent   = '🌿 ' + user.name;
+}
+
+function renderOverviewStats(user) {
+  const pts  = user.points || 0;
+  const logs = user.logs   || [];
+  document.getElementById('statPoints').textContent = pts;
+  document.getElementById('statStreak').textContent = user.streak || 0;
+  document.getElementById('statWater').textContent  = logs.filter(l => l.type === 'water').length;
+  document.getElementById('statLogs').textContent   = logs.length;
+
+  const cur  = getCurrentBadge(pts);
+  const next = getNextBadge(pts);
+  const thr  = [0,101,501,1000];
+  const idx  = BADGES.slice(0,4).indexOf(cur);
+  const base = thr[idx] || 0, ceil = thr[idx+1] || pts;
+  const pct  = ceil > base ? Math.min(100, Math.round(((pts-base)/(ceil-base))*100)) : 100;
+  document.getElementById('statProgressBar').style.setProperty('--w', pct + '%');
+  document.getElementById('statBadgeNext').textContent = next
+    ? cur.emoji + ' ' + cur.name + ' — ' + (next.minPts - pts) + ' pts to unlock ' + next.name
+    : '🏆 Max rank achieved: Earth Champion!';
+  document.getElementById('statStreakSub').textContent =
+    user.streak > 1 ? 'Keep going — log today!' :
+    user.streak === 1 ? 'Streak started! Log tomorrow too.' :
+    'Log today to start your streak!';
+}
+
+function renderBadges(user) {
+  const pts = user.points || 0, cur = getCurrentBadge(pts);
+  document.getElementById('badgesRow').innerHTML = BADGES.map(b => {
+    const earned = pts >= b.minPts;
+    const cls    = earned ? (b.id === cur.id ? 'badge-item earned active' : 'badge-item earned') : 'badge-item locked';
+    return `<div class="${cls}"><span>${b.emoji}</span><small>${b.name}</small></div>`;
+  }).join('');
+}
+
+function renderBarChart(user) {
+  const logs = user.logs || [];
+  const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const days = Array.from({length:7}, (_,i) => {
+    const d = new Date(); d.setDate(d.getDate() - (6-i));
+    const ds = d.toISOString().split('T')[0];
+    return { label: DAYS[d.getDay()], pts: logs.filter(l=>l.date===ds).reduce((s,l)=>s+(l.points||0),0), isToday: i===6 };
+  });
+  const container = document.getElementById('barChartArea');
+  if (days.every(d => d.pts === 0)) {
+    container.innerHTML = '<div class="empty-chart"><span>📊</span>Log your first resource to see your chart!</div>';
+    return;
+  }
+  const mx = Math.max(...days.map(d=>d.pts), 1);
+  container.innerHTML = '<div class="bar-chart">' +
+    days.map(d => `<div class="${d.isToday?'bar today':'bar'}" style="--h:${Math.max(4,Math.round((d.pts/mx)*100))}%" title="${d.pts} pts"><span>${d.label}</span></div>`).join('') +
+  '</div>';
+}
+
+function renderPieChart(user) {
+  const logs = user.logs || [];
+  const container = document.getElementById('pieWrapper');
+  if (!logs.length) { container.innerHTML = '<div class="empty-chart"><span>🥧</span>Log activities to see your breakdown!</div>'; return; }
+  const c = {water:0,energy:0,travel:0,food:0};
+  logs.forEach(l => { if (c[l.type]!==undefined) c[l.type]++; });
+  const total = Object.values(c).reduce((s,v)=>s+v,0)||1;
+  const w=Math.round((c.water/total)*100), e=Math.round((c.energy/total)*100), t=Math.round((c.travel/total)*100), f=100-w-e-t;
+  container.innerHTML = `
+    <div class="pie-chart" style="--water:${w};--energy:${e};--travel:${t};--food:${f}"></div>
+    <div class="pie-legend">
+      <span class="legend-item water">💧 Water ${w}%</span>
+      <span class="legend-item energy">⚡ Energy ${e}%</span>
+      <span class="legend-item travel">🚗 Travel ${t}%</span>
+      <span class="legend-item food">🥗 Food ${f}%</span>
+    </div>`;
+}
+
+function renderChallenges(user) {
+  const t = today(), done = (user.completedChallenges && user.completedChallenges[t]) || [];
+  document.getElementById('challengesList').innerHTML = CHALLENGES.map(ch => {
+    const isDone = done.includes(ch.id);
+    return `<div class="challenge-item ${isDone?'done':''}">
+      <span class="ch-icon">${isDone?'✅':'⬜'}</span>
+      <div class="ch-info"><strong>${ch.icon} ${ch.title}</strong><small>+${ch.pts} pts</small></div>
+      ${!isDone?`<button class="ch-complete-btn" onclick="completeChallenge('${ch.id}',${ch.pts})">Done</button>`:''}
+    </div>`;
+  }).join('');
+}
+
+// =====================================================================
+//  LEADERBOARD
+// =====================================================================
+let currentLbLevel = 'city';
+const LB_META = {
+  city:     { icon:'🏙️', label:'City Level'     },
+  district: { icon:'🗺️', label:'District Level'  },
+  zone:     { icon:'🌐', label:'Zone Level'      },
+  nation:   { icon:'🌏', label:'National Level'  },
+};
+
+function showLbLevel(level, el) {
+  currentLbLevel = level;
+  document.querySelectorAll('.lb-loc-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderLeaderboard(getUser());
+}
+
+function renderLeaderboard(user) {
+  const pts     = user.points || 0;
+  const level   = currentLbLevel;
+  const meta    = LB_META[level];
+  const city    = user.city   || 'Your City';
+  const nation  = user.nation || 'Your Nation';
+  const locName = level === 'city' ? city : level === 'nation' ? nation : meta.label;
+
+  document.getElementById('lbLevelBadge').textContent  = meta.icon + ' ' + locName;
+  document.getElementById('lbSubtitle').textContent    = meta.label + ' · ' + locName;
+
+  const demos = LB_DATA[level];
+  const all   = [...demos, { name: user.name + ' (You)', pts, emoji: getCurrentBadge(pts).emoji, isYou: true }]
+    .sort((a,b) => b.pts - a.pts);
+
+  const top3 = all.slice(0,3);
+  const order = top3.length >= 3 ? [top3[1],top3[0],top3[2]] : top3;
+  const pCls  = ['second','first','third'], pHt = ['60px','80px','48px'];
+  document.getElementById('lbPodium').innerHTML = order.map((p,i) => {
+    const rank = all.indexOf(p)+1;
+    return `<div class="podium-item ${pCls[i]}">
+      ${rank===1?'<div class="podium-crown">👑</div>':''}
+      <div class="podium-avatar">${p.emoji}</div>
+      <div class="podium-name">${p.name}</div>
+      <div class="podium-pts">${p.pts} pts</div>
+      <div class="podium-block" style="height:${pHt[i]}">${rank}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('lbList').innerHTML = all.slice(3).map((p,i) => {
+    const badge = getCurrentBadge(p.pts);
+    return `<div class="${p.isYou?'lb-row lb-you':'lb-row'}">
+      <span class="lb-rank">${i+4}</span>
+      <span class="lb-avatar">${p.emoji}</span>
+      <span class="lb-name">${p.name}</span>
+      <span class="lb-badge">${badge.emoji} ${badge.name}</span>
+      <span class="lb-pts">${p.pts} pts</span>
+    </div>`;
+  }).join('');
+}
+
+// =====================================================================
+//  CHALLENGES
+// =====================================================================
+function completeChallenge(id, pts) {
+  const user = getUser();
+  if (!user) return;
+  const t = today();
+  if (!user.completedChallenges) user.completedChallenges = {};
+  if (!user.completedChallenges[t]) user.completedChallenges[t] = [];
+  if (user.completedChallenges[t].includes(id)) return;
+  user.completedChallenges[t].push(id);
+  user.points = (user.points||0) + pts;
+  processStreak(user);
+  if (!user.logs) user.logs = [];
+  user.logs.push({ date: t, type:'challenge', points: pts });
+  saveUser(user); renderAll();
+  const toast = document.getElementById('toast');
+  if (toast) { toast.textContent = '✅ Challenge complete! +' + pts + ' pts!'; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),3000); }
+}
+
+// =====================================================================
+//  FULL RENDER
+// =====================================================================
+function renderAll() {
+  const user = getUser(); if (!user) return;
+  renderNavBar(user); renderOverviewStats(user); renderBadges(user);
+  renderBarChart(user); renderPieChart(user); renderChallenges(user); renderLeaderboard(user);
+}
+
+// =====================================================================
+//  TAB SWITCHING
+// =====================================================================
+function showTab(tabName) {
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.dash-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+tabName).classList.add('active');
+  const labels = {overview:'Overview',track:'Track',leaderboard:'Leaderboard',edu:'Learn'};
+  document.querySelectorAll('.dash-tab').forEach(btn=>{ if(btn.textContent===labels[tabName]) btn.classList.add('active'); });
+}
+
+// =====================================================================
+//  EDUCATION HUB
+// =====================================================================
+function openLearn(type, topic) {
+  if (type === 'video')   window.open('https://www.youtube.com/results?search_query=' + encodeURIComponent(topic), '_blank');
+  else if (type === 'article') window.open('https://www.google.com/search?q=' + encodeURIComponent(topic), '_blank');
+  else if (type === 'quiz') {
+    if (!chatOpen) toggleChat();
+    setTimeout(() => {
+      document.getElementById('chatInput').value = 'Quiz me on ' + topic + ' with 5 multiple choice questions. Wait for each of my answers, then give me a final score!';
+      sendMessage();
+    }, 350);
+  }
+}
+
+// =====================================================================
+//  CHATBOT
+// =====================================================================
+let chatOpen = false;
+function toggleChat() {
+  chatOpen = !chatOpen;
+  document.getElementById('chatWindow').classList.toggle('open', chatOpen);
+}
+function appendMessage(text, role) {
+  const c = document.getElementById('chatMessages');
+  const d = document.createElement('div'); d.className = 'chat-msg ' + role;
+  const b = document.createElement('div'); b.className = 'msg-bubble';
+  b.innerHTML = text.replace(/\n/g,'<br/>');
+  d.appendChild(b); c.appendChild(d); c.scrollTop = c.scrollHeight;
+}
+function showTyping() {
+  const c = document.getElementById('chatMessages');
+  const d = document.createElement('div'); d.id = 'typingDot'; d.className = 'chat-msg ai typing-indicator';
+  d.innerHTML = '<div class="msg-bubble"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>';
+  c.appendChild(d); c.scrollTop = c.scrollHeight;
+}
+function removeTyping() { const d=document.getElementById('typingDot'); if(d) d.remove(); }
+
+async function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const text  = input.value.trim(); if (!text) return;
+  const key   = getGroqKey();
+  if (!key) { openApiKeyModal(); return; }
+  input.value = ''; appendMessage(text, 'user'); showTyping();
+  const user = getUser();
+  const ctx  = `You are EcoBot, a friendly sustainability coach for school students in an eco-tracking app.
+User: ${user?user.name:'student'} | Points: ${user?user.points:0} | Streak: ${user?user.streak:0} days | City: ${user?(user.city||'unknown'):'unknown'}
+Role: Give eco tips, explain environmental science, motivate students, run multiple-choice quizzes when asked.
+Style: Warm, concise, use emojis. Never mention any AI brand or provider name.`;
+  try {
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
+      body: JSON.stringify({
+        model: 'llama-3.1-8b-instant',
+        messages: [{ role: 'system', content: ctx }, { role: 'user', content: text }],
+        max_tokens: 1024
+      })
+    });
+    const data = await res.json(); removeTyping();
+    if (data.choices && data.choices[0]) appendMessage(data.choices[0].message.content, 'ai');
+    else if (data.error && data.error.code === 'invalid_api_key') {
+      appendMessage('⚠️ Invalid API key. Please update it.', 'ai');
+      openApiKeyModal();
+    } else appendMessage('⚠️ ' + (data.error ? data.error.message : 'Something went wrong.'), 'ai');
+  } catch(e) { removeTyping(); appendMessage('⚠️ Network error. Please try again.', 'ai'); }
+}
+
+// =====================================================================
+//  INIT
+// =====================================================================
+window.addEventListener('load', renderAll);
+
+// Hidden toast element for challenge completion
+document.addEventListener('DOMContentLoaded', () => {
+  if (!document.getElementById('toast')) {
+    const t = document.createElement('div'); t.id = 'toast'; t.className = 'toast';
+    document.body.appendChild(t);
+  }
+});
+</script>
+
+<!-- API KEY SETUP MODAL -->
+<div class="auth-overlay" id="apiKeyModal">
+  <div class="auth-modal" style="max-width:420px">
+    <button class="auth-close" onclick="closeApiKeyModal()">✕</button>
+    <div style="text-align:center;margin-bottom:1.2rem">
+      <div style="font-size:2rem">🤖</div>
+      <h2 style="margin:.4rem 0 .3rem;font-size:1.2rem;color:var(--text)">Connect EcoBot</h2>
+      <p style="font-size:.85rem;color:var(--muted);margin:0">Paste your free Groq API key below.<br>It is saved only on your device — never sent anywhere else.</p>
+    </div>
+    <div class="auth-field">
+      <label>Groq API Key</label>
+      <input type="password" id="apiKeyInput" placeholder="gsk_..." autocomplete="off"
+        onkeydown="if(event.key==='Enter')submitApiKey()" style="font-family:monospace;font-size:.85rem"/>
+    </div>
+    <div class="auth-error" id="apiKeyError"></div>
+    <button class="auth-submit" onclick="submitApiKey()" style="margin-top:.8rem">Save Key →</button>
+    <div style="text-align:center;margin-top:.9rem">
+      <p style="font-size:.78rem;color:var(--muted);margin:0 0 .5rem">Don't have a key yet? Get one free in 30 seconds:</p>
+      <a href="https://console.groq.com/keys" target="_blank" rel="noopener"
+        style="display:inline-flex;align-items:center;gap:.4rem;padding:.45rem 1rem;border-radius:8px;background:#f4f4f5;color:#18181b;font-size:.82rem;font-weight:600;text-decoration:none;border:1px solid #e4e4e7;transition:background .15s"
+        onmouseover="this.style.background='#e4e4e7'" onmouseout="this.style.background='#f4f4f5'">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+        Get free API key on Groq
+      </a>
+    </div>
+  </div>
+</div>
+</body>
+</html>
